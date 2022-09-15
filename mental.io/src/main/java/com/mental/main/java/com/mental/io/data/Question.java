@@ -26,6 +26,11 @@ public class Question {
     private QuestionCategory questionCategory;
     private Date createdAt;
     private Date updatedAt;
+    private String scenarioText;
+    private String optionOne;
+    private String optionTwo;
+    private String optionThree;
+    private String optionFour;
 
 
 }
