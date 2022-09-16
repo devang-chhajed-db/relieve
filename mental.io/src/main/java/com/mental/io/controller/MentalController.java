@@ -8,7 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -38,20 +40,40 @@ public class MentalController {
         return "up";
     }
 
+    @PostMapping("/login")
+    @CrossOrigin
+    public ResponseEntity<?> login(@RequestBody User user){
+        String username = user.getUserName();
+        String password = user.getPassword();
+
+        if(Objects.nonNull(username) && Objects.nonNull(password) && !username.isEmpty() && !password.isEmpty()) {
+
+            if(username.equals(password)) {
+
+                return new ResponseEntity<>(username, HttpStatus.OK);
+
+            } else {
+
+                return new ResponseEntity<>("Username and Password not matched incorrect", HttpStatus.BAD_REQUEST);
+
+            }
+
+        }
+
+        else {
+
+            return new ResponseEntity<>("Username or password is incorrect", HttpStatus.BAD_REQUEST);
+
+        }
+
+    }
+
+
     @GetMapping("/users/{id}")
     public User getUser(@PathVariable long id){
         return userRepository.findById(id).get();
     }
 
-//    @PostMapping(
-//            value = "/save/course",
-//            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-//            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
-//    )
-//
-////    public Courses saveCourse(@RequestBody DummyRequest request){
-////       return coursesJpaRepository.saveAndFlush(generatedCourse(request));
-////    }
 
     @PostMapping(
             value = "/create/course",
